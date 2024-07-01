@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reminder Manager</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 20px;
+    }
+    #reminder-list {
+      list-style: none;
+      padding: 0;
+    }
+    #reminder-list li {
+      margin-bottom: 10px;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+    .actions button {
+      margin-left: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Reminder Manager</h1>
+
+  <div>
+    <label for="reminder-text">Reminder:</label>
+    <input type="text" id="reminder-text">
+    <label for="reminder-time">Time:</label>
+    <input type="datetime-local" id="reminder-time">
+    <button id="add-reminder">Add Reminder</button>
+  </div>
+
+  <ul id="reminder-list"></ul>
+
+  <script>
+    const reminderList = document.getElementById('reminder-list');
+    const reminderText = document.getElementById('reminder-text');
+    const reminderTime = document.getElementById('reminder-time');
+    const addReminderButton = document.getElementById('add-reminder');
+
+    let reminders = [];
+
+    // Function to add a new reminder
+    function addReminder() {
+      const text = reminderText.value;
+      const time = new Date(reminderTime.value);
+
+      if (text && time) {
+        const reminder = {
+          text: text,
+          time: time,
+          timeoutId: null
+        };
+
+        reminders.push(reminder);
+        displayReminders();
+        scheduleReminder(reminder);
+
+        reminderText.value = '';
+        reminderTime.value = '';
+      } else {
+        alert('Please enter a reminder and time.');
+      }
+    }
+
+    // Function to schedule a reminder
+    function scheduleReminder(reminder) {
+      const timeDiff = reminder.time - new Date();
+      if (timeDiff > 0) {
+        reminder.timeoutId = setTimeout(() => {
+          alert(reminder.text);
+          displayReminders();
+        }, timeDiff);
+      }
+    }
+
+    // Function to display reminders in the list
+    function displayReminders() {
+      reminderList.innerHTML = '';
+
+      reminders.forEach((reminder, index) => {
+        const listItem = document.createElement('li');
+        listItem.textContent = reminder.text + ' - ' + reminder.time.toLocaleString();
+
+        const actions = document.createElement('div');
+        actions.classList.add('actions');
+
+        // Edit button
+        const editButton = document.createElement('button');
+        editButton.textContent = 'Edit';
+        editButton.addEventListener('click', () => {
+          reminderText.value = reminder.text;
+          reminderTime.value = reminder.time.toISOString().slice(0, 16);
+          editReminder(index);
+        });
+
+        // Delete button
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Delete';
+        deleteButton.addEventListener('click', () => {
+          deleteReminder(index);
+        });
+
+        actions.appendChild(editButton);
+        actions.appendChild(deleteButton);
+
+        listItem.appendChild(actions);
+        reminderList.appendChild(listItem);
+      });
+    }
+
+    // Function to edit an existing reminder
+    function editReminder(index) {
+      const text = reminderText.value;
+      const time = new Date(reminderTime.value);
+
+      if (text && time) {
+        clearTimeout(reminders[index].timeoutId);
+        reminders[index].text = text;
+        reminders[index].time = time;
+        scheduleReminder(reminders[index]);
+        displayReminders();
+
+        reminderText.value = '';
+        reminderTime.value = '';
+      } else {
+        alert('Please enter a reminder and time.');
+      }
+    }
+
+    // Function to delete a reminder
+    function deleteReminder(index) {
+      clearTimeout(reminders[index].timeoutId);
+      reminders.splice(index, 1);
+      displayReminders();
+    }
+
+    // Event listener for adding a new reminder
+    addReminderButton.addEventListener('click', addReminder);
+
+    // Initial display of reminders (empty list)
+    displayReminders();
+  </script>
+</body>
+</html>
+</script>
+</html>
