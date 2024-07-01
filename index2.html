@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+    const images = [
+  "image1.jpg",
+  "image2.jpg",
+  "image3.jpg",
+  // Add more image URLs here
+];
+
+let currentImageIndex = 0;
+
+const slideshow = document.getElementById("slideshow");
+const imageElement = document.createElement("img");
+imageElement.src = images[currentImageIndex];
+slideshow.appendChild(imageElement);
+
+function nextImage() {
+  currentImageIndex = (currentImageIndex + 1) % images.length;
+  imageElement.src = images[currentImageIndex];
+}
+
+setInterval(nextImage, 2000); // Change image every 2 seconds
+</script>
+</html>
