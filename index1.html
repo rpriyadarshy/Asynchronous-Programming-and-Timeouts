@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+    // Get the display element, start button, stop button, and reset button
+const display = document.getElementById('display');
+const startButton = document.getElementById('start');
+const stopButton = document.getElementById('stop');
+const resetButton = document.getElementById('reset');
+
+// Initialize variables for timer
+let timerInterval;
+let startTime;
+let elapsedTime = 0;
+
+// Function to update the display with the elapsed time
+function updateDisplay() {
+  // Calculate the elapsed time in seconds
+  const seconds = Math.floor(elapsedTime / 1000);
+  // Calculate the remaining seconds
+  const remainingSeconds = seconds % 60;
+  // Calculate the minutes
+  const minutes = Math.floor(seconds / 60);
+  // Format the time as MM:SS
+  const formattedTime = `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+  // Update the display element
+  display.textContent = formattedTime;
+}
+
+// Function to start the timer
+function startTimer() {
+  // Set the start time
+  startTime = Date.now();
+  // Start the timer interval
+  timerInterval = setInterval(() => {
+    // Update the elapsed time
+    elapsedTime = Date.now() - startTime;
+    // Update the display
+    updateDisplay();
+  }, 1000);
+  // Disable the start button
+  startButton.disabled = true;
+  // Enable the stop button
+  stopButton.disabled = false;
+}
+
+// Function to stop the timer
+function stopTimer() {
+  // Clear the timer interval
+  clearInterval(timerInterval);
+  // Enable the start button
+  startButton.disabled = false;
+  // Disable the stop button
+  stopButton.disabled = true;
+}
+
+// Function to reset the timer
+function resetTimer() {
+  // Stop the timer if it's running
+  if (timerInterval) {
+    stopTimer();
+  }
+  // Reset the elapsed time
+  elapsedTime = 0;
+  // Update the display
+  updateDisplay();
+}
+
+// Add event listeners to the buttons
+startButton.addEventListener('click', startTimer);
+stopButton.addEventListener('click', stopTimer);
+resetButton.addEventListener('click', resetTimer);
+</script>
+</html>
